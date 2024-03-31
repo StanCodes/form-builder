@@ -2,9 +2,10 @@
     "compilerOptions": {
         "outDir": "./dist",
         "target": "es5",
-        "module": "es6",
+        "module": "ES2015",
         "incremental": false,
         "jsx": "react-jsx",
+        "jsxImportSource": "@emotion/react",
         "baseUrl": "./src",
         "allowJs": true,
         "checkJs": false,
@@ -16,7 +17,8 @@
         "noImplicitAny": true,
         "strictNullChecks": true,
         "moduleResolution": "node",
-        "types": ["@emotion/react/types/css-prop"]
+        "types": ["@emotion/react/types/css-prop"],
+        "lib": ["es6", "dom", "es2016"]
     },
     "include": ["**/*.ts", "**/*.tsx"],
     "exclude": ["./dist/**/*"]
