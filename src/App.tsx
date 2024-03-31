@@ -1,5 +1,11 @@
+import Form from 'modules/builder/Form/Form'
+
 const App = (): JSX.Element => {
-    return <div>hey builder</div>
+    return (
+        <div>
+            <Form />
+        </div>
+    )
 }
 
 export default App
