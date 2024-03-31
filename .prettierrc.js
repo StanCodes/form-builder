@@ -8,7 +8,16 @@ module.exports = {
     importOrderSeparation: true,
     importOrderSortSpecifiers: true,
     importOrderCaseInsensitive: true,
-    importOrder: ['App', '^components/(.*)$', '^modules/(.*)$', '^utils/(.*)$', '^config/(.*)$', '^[./]'],
+    importOrder: [
+        'App',
+        '^components/(.*)$',
+        '^config/(.*)$',
+        '^modules/(.*)$',
+        '^utils/(.*)$',
+        '^styles/(.*)$',
+        '^types/(.*)$',
+        '^[./]'
+    ],
     printWidth: 120,
     endOfLine: 'auto',
     arrowParens: 'always',
