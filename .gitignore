@@ -1,0 +1,18 @@
+# Project dependencies
+node_modules
+# package-lock.json
+
+.next
+
+# Build directory
+/dist
+/public
+.DS_Store
+
+#GIT
+.git
+
+# Env variables
+*.env
+
+*.sh
