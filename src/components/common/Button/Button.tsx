@@ -24,6 +24,16 @@ const styles = {
         cursor: pointer;
         border: 1px solid;
     `,
+    buttonDisabled: css`
+        background-color: ${Colors.lightGray};
+        color: ${Colors.gray};
+        border: 1px solid ${Colors.gray};
+
+        &:hover {
+            background-color: ${Colors.lightGray};
+            color: ${Colors.gray};
+        }
+    `,
     [ButtonEnums.type.primary]: css`
         background-color: ${Colors.green};
         color: ${Colors.white};
@@ -67,7 +77,13 @@ const Button = ({
         <button
             type='button'
             id={id}
-            css={[styles.button, type && styles[type], styles[variant], customStyles]}
+            css={[
+                styles.button,
+                type && styles[type],
+                styles[variant],
+                customStyles,
+                disabled && styles.buttonDisabled
+            ]}
             onClick={onClick}
             disabled={disabled}
             aria-disabled={disabled}

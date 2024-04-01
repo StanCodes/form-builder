@@ -18,6 +18,7 @@ import { FormRow, FormState } from 'types/form.types'
 import { SelectOption } from 'types/select.types'
 
 import { removeLocalStorage, setLocalStorage } from 'utils/persistence'
+import { validateChoices, validateLabelField } from 'utils/validation'
 
 const styles = {
     form: css`
@@ -57,9 +58,15 @@ const styles = {
 
 const { text, checkbox, select, textarea } = appConstants.formRowTypes
 const { fieldType, fieldLabel, defaultValue, choicesListbox, sortSelect } = appConstants.formControlids
+const initialValidation = {
+    [fieldLabel]: '',
+    [choicesListbox]: ''
+}
 const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
     const [formData, setFormData] = useState(data)
+    const [formErrors, setFormErrors] = useState(initialValidation)
     const formDataRef = useRef(formData) // for storage synchronization
+    const formHasErrors = Object.values(formErrors).some((error) => error !== '') // for formErrors
 
     const formRows: FormRow[] = [
         { rowLabel: 'Label', type: text, id: fieldLabel, placeholder: 'Field Label' },
@@ -84,10 +91,17 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
         setFormData(data)
     }, [data])
 
-    // syncs form data with ref
+    // syncs form data with ref and validates form
     useEffect(() => {
         formDataRef.current = formData
-    }, [formData])
+        const labelErrorMessage = validateLabelField(formData[fieldLabel])
+        const choicesErrorMessage = validateChoices(formData[choicesListbox])
+
+        setFormErrors({
+            [fieldLabel]: labelErrorMessage,
+            [choicesListbox]: choicesErrorMessage
+        })
+    }, [formData, setFormErrors])
 
     // will handle saving local storage form data
     useEffect(() => {
@@ -113,6 +127,7 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
                     noWrap
                     value={formData[row.id] as string}
                     onChange={inputOnChange}
+                    error={row.id === fieldLabel ? formErrors?.[fieldLabel] : undefined} // for typescript type check
                 />
             )
         }
@@ -148,6 +163,7 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
                         )
                         .join(newLine)}
                     noWrap
+                    error={formErrors?.[choicesListbox]}
                 />
             )
         }
@@ -176,15 +192,16 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
         )
     }
 
-    const handleSave = () => {
+    const handleSave = useCallback(() => {
         removeLocalStorage(storageKey)
-        const choices = formData[choicesListbox]
+        const choices = formData[choicesListbox].filter((choice) => !!choice) //filter rows with newline only
         const saveData = {
             ...formData,
             [choicesListbox]: choices.includes(formData[defaultValue]) ? choices : [...choices, formData[defaultValue]]
         }
+        setFormData(saveData)
         fieldService.saveField(saveData) // TO DO loading indicator
-    }
+    }, [formData])
 
     const handleCancel = useCallback(() => {
         setFormData(data)
@@ -195,7 +212,7 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
             <form css={styles.form}>
                 {formRows.map((row) => renderRow(row))}
                 <div css={styles.buttonWrapper}>
-                    <Button type={ButtonEnums.type.primary} onClick={handleSave}>
+                    <Button disabled={formHasErrors} type={ButtonEnums.type.primary} onClick={handleSave}>
                         Save Changes
                     </Button>
                     <span css={styles.buttonSeparator}>or</span>

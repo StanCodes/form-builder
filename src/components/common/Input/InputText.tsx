@@ -18,6 +18,10 @@ const styles = {
         &:active &:focus-visible {
             outline: 1px solid ${Colors.gray};
         }
+    `,
+    error: css`
+        margin-bottom: 0;
+        color: ${Colors.danger};
     `
 }
 const InputText = ({
@@ -29,7 +33,8 @@ const InputText = ({
     disabled,
     customStyles,
     label,
-    noWrap
+    noWrap,
+    error
 }: OwnProps): JSX.Element => {
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         onChange?.(event.target.value)
@@ -41,16 +46,19 @@ const InputText = ({
                     {label}
                 </label>
             )}
-            <input
-                id={id}
-                name={name}
-                type='text'
-                value={value}
-                onChange={disabled ? undefined : handleOnChange}
-                placeholder={placeholder}
-                disabled={disabled}
-                css={[styles.input, customStyles]}
-            />
+            <div css={customStyles}>
+                <input
+                    id={id}
+                    name={name}
+                    type='text'
+                    value={value}
+                    onChange={disabled ? undefined : handleOnChange}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    css={styles.input}
+                />
+                {!!error && <p css={styles.error}>{error}</p>}
+            </div>
         </InputWrapper>
     )
 }
@@ -65,6 +73,7 @@ interface OwnProps {
     disabled?: boolean
     customStyles?: SerializedStyles
     label?: ReactNode
+    error?: string
 }
 
 export default InputText
