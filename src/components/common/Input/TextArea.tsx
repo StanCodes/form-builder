@@ -20,6 +20,10 @@ const styles = {
         &:active &:focus-visible {
             outline: 1px solid ${Colors.gray};
         }
+    `,
+    error: css`
+        margin-bottom: 0;
+        color: ${Colors.danger};
     `
 }
 
@@ -32,7 +36,8 @@ const TextArea = ({
     disabled,
     customStyles,
     label,
-    noWrap
+    noWrap,
+    error
 }: OwnProps): JSX.Element => {
     const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
         onChange?.(event.target.value)
@@ -44,15 +49,18 @@ const TextArea = ({
                     {label}
                 </label>
             )}
-            <textarea
-                id={id}
-                name={name}
-                value={value}
-                onChange={disabled ? undefined : handleOnChange}
-                placeholder={placeholder}
-                disabled={disabled}
-                css={[styles.textarea, customStyles]}
-            />
+            <div css={customStyles}>
+                <textarea
+                    id={id}
+                    name={name}
+                    value={value}
+                    onChange={disabled ? undefined : handleOnChange}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    css={styles.textarea}
+                />
+                {!!error && <p css={styles.error}>{error}</p>}
+            </div>
         </InputWrapper>
     )
 }
@@ -67,6 +75,7 @@ interface OwnProps {
     disabled?: boolean
     customStyles?: SerializedStyles
     label?: ReactNode
+    error?: string
 }
 
 export default TextArea

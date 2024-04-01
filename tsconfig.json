@@ -18,7 +18,7 @@
         "strictNullChecks": true,
         "moduleResolution": "node",
         "types": ["@emotion/react/types/css-prop"],
-        "lib": ["es6", "dom", "es2016"]
+        "lib": ["es6", "dom", "es2016", "es2017"]
     },
     "include": ["**/*.ts", "**/*.tsx"],
     "exclude": ["./dist/**/*"]
