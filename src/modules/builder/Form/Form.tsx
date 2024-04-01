@@ -76,13 +76,11 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
             rowLabel: 'Choices',
             type: textarea,
             id: choicesListbox
-            //options: formData[choicesListbox] //TODO: transform to {id: string, label: string}
         },
         {
             rowLabel: 'Choices',
             type: select,
-            id: sortSelect,
-            options: sortOptions
+            id: sortSelect
         }
     ]
 
@@ -134,7 +132,7 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
         if (row.type === checkbox) {
             control = (
                 <div css={[styles.control, styles.multipleControl]}>
-                    {/* hard coded for */}
+                    {/* hard coded for now */}
                     <span>Multi-select</span>
                     <Checkbox
                         customStyles={styles.marginLeft}
@@ -147,7 +145,6 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
             )
         }
         if (row.type === textarea) {
-            //const options = row.options
             const newLine = '\r\n'
             const handleOnChange = (value: string) => {
                 setFormData({ ...formData, [choicesListbox]: value.split(/\r?\n/) })
@@ -175,7 +172,7 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
                 <SingleSelect
                     customStyles={styles.control}
                     id={row.id}
-                    options={row.options}
+                    options={sortOptions}
                     onChange={handleOnChange}
                     value={formData[sortSelect]}
                 />
@@ -193,14 +190,14 @@ const Form = ({ data, storageKey, sortOptions }: OwnProps): JSX.Element => {
     }
 
     const handleSave = useCallback(() => {
-        removeLocalStorage(storageKey)
         const choices = formData[choicesListbox].filter((choice) => !!choice) //filter rows with newline only
         const saveData = {
             ...formData,
             [choicesListbox]: choices.includes(formData[defaultValue]) ? choices : [...choices, formData[defaultValue]]
         }
-        setFormData(saveData)
         fieldService.saveField(saveData) // TO DO loading indicator
+        removeLocalStorage(storageKey)
+        setFormData(saveData)
     }, [formData])
 
     const handleCancel = useCallback(() => {
