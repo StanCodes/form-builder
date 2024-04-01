@@ -13,6 +13,7 @@ const styles = {
         padding: 0.4rem 0.8rem;
         border-radius: 5px;
         border: 1px solid ${Colors.lightGray};
+        width: 100%;
 
         &:focus,
         &:active &:focus-visible {
