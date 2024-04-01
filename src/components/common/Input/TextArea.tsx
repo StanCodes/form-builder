@@ -1,18 +1,20 @@
 import { css, SerializedStyles } from '@emotion/react'
 import { ReactNode } from 'react'
 
-import InputWrapper from 'components/common/Input/InputWrapper'
-
 import Colors from 'styles/Colors'
+
+import InputWrapper from './InputWrapper'
 
 const styles = {
     label: css`
         margin-right: 1rem;
     `,
-    input: css`
+    textarea: css`
         padding: 0.4rem 0.8rem;
         border-radius: 5px;
         border: 1px solid ${Colors.lightGray};
+        height: 8rem;
+        resize: none;
 
         &:focus,
         &:active &:focus-visible {
@@ -20,7 +22,8 @@ const styles = {
         }
     `
 }
-const InputText = ({
+
+const TextArea = ({
     id,
     name,
     value,
@@ -31,7 +34,7 @@ const InputText = ({
     label,
     noWrap
 }: OwnProps): JSX.Element => {
-    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
         onChange?.(event.target.value)
     }
     return (
@@ -41,15 +44,14 @@ const InputText = ({
                     {label}
                 </label>
             )}
-            <input
+            <textarea
                 id={id}
                 name={name}
-                type='text'
                 value={value}
                 onChange={disabled ? undefined : handleOnChange}
                 placeholder={placeholder}
                 disabled={disabled}
-                css={[styles.input, customStyles]}
+                css={[styles.textarea, customStyles]}
             />
         </InputWrapper>
     )
@@ -67,4 +69,4 @@ interface OwnProps {
     label?: ReactNode
 }
 
-export default InputText
+export default TextArea

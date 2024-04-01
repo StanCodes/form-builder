@@ -60,7 +60,8 @@ const Button = ({
     disabled,
     customStyles,
     type,
-    variant = ButtonEnums.variant.default
+    variant = ButtonEnums.variant.default,
+    title
 }: OwnProps) => {
     return (
         <button
@@ -70,6 +71,7 @@ const Button = ({
             onClick={onClick}
             disabled={disabled}
             aria-disabled={disabled}
+            title={title}
         >
             {children}
         </button>
@@ -84,6 +86,7 @@ interface OwnProps {
     customStyles?: SerializedStyles
     type?: valueof<typeof ButtonEnums.type>
     variant?: valueof<typeof ButtonEnums.variant>
+    title?: string
 }
 
 export default Button

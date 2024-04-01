@@ -73,8 +73,8 @@ const styles = {
 }
 
 const Checkbox = ({ id, name, checked, onChange, disabled, customStyles, label }: OwnProps) => {
-    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        onChange?.(event.target.value)
+    const handleOnChange = (): void => {
+        onChange?.(!checked)
     }
     return (
         <div css={[styles.wrapper, customStyles]}>
@@ -98,7 +98,7 @@ interface OwnProps {
     id: string
     name?: string
     checked?: boolean
-    onChange?: (value: string) => void
+    onChange?: (value: boolean) => void
     disabled?: boolean
     customStyles?: SerializedStyles
     label?: ReactNode
