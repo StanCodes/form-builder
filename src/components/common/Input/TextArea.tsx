@@ -15,6 +15,7 @@ const styles = {
         border: 1px solid ${Colors.lightGray};
         height: 8rem;
         resize: none;
+        width: 100%;
 
         &:focus,
         &:active &:focus-visible {
