@@ -2,36 +2,45 @@ import appConstants from 'config/constants'
 
 import { SelectOption } from 'types/select.types'
 
-const { text, checkbox, select, listbox } = appConstants.formRowTypes
+const { text, checkbox, select, listbox, textarea } = appConstants.formRowTypes
 const { fieldType, fieldLabel, defaultValue, choicesListbox, sortSelect } = appConstants.formControlids
+
+type ControlId = valueof<typeof appConstants.formControlids>
 
 interface InputRow {
     rowLabel: string
     type: typeof text
-    id: string
+    id: ControlId
     placeholder?: string
 }
 
 interface CheckboxRow {
     rowLabel?: string
     type: typeof checkbox
-    id: string
+    id: ControlId
     label?: string
 }
 
 interface ListboxRow {
     rowLabel?: string
     type: typeof listbox
-    id: string
+    id: ControlId
     options: string[]
-    onChange?: (value: string) => void
+    //onChange?: (value: string) => void
 }
 
 interface SelectRow {
     rowLabel?: string
     type: typeof select
-    id: string
+    id: ControlId
     options: SelectOption[]
+}
+
+interface TextAreaRow {
+    rowLabel?: string
+    type: typeof textarea
+    id: ControlId
+    //options: SelectOption[]
 }
 
 export type FormState = {
@@ -42,4 +51,4 @@ export type FormState = {
     [sortSelect]: SelectOption | null
 }
 
-export type FormRow = InputRow | CheckboxRow | ListboxRow | SelectRow
+export type FormRow = InputRow | CheckboxRow | ListboxRow | SelectRow | TextAreaRow

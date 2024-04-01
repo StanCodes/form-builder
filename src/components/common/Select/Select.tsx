@@ -1,6 +1,8 @@
 import { css, SerializedStyles } from '@emotion/react'
 import { ReactNode } from 'react'
 
+import Button, { ButtonEnums } from 'components/common/Button/Button'
+
 import Colors from 'styles/Colors'
 
 const styles = {
@@ -25,10 +27,18 @@ const styles = {
     listItem: css`
         padding: 0.2rem 0.8rem;
         cursor: pointer;
+        display: flex;
+        align-items: center;
 
         &:hover {
             background: ${Colors.lightGray};
         }
+    `,
+    listItemReadOnly: css`
+        cursor: default;
+    `,
+    listItemRemoveButton: css`
+        margin-left: auto;
     `,
     listItemSelectd: css`
         background: ${Colors.lightGray};
@@ -40,7 +50,7 @@ const styles = {
 }
 
 // TODO: add support for single value
-const Select = ({ id, options, value, onChange, disabled, customStyles, label }: OwnProps) => {
+const Select = ({ id, options, value, onChange, onRemoveItem, disabled, customStyles, label, readonly }: OwnProps) => {
     const handleOnChange = (option: string): void => {
         const values = (value as unknown as string[]) ?? []
         onChange?.(
@@ -48,6 +58,10 @@ const Select = ({ id, options, value, onChange, disabled, customStyles, label }:
                 ? values.filter((selectedOption) => selectedOption !== option)
                 : [...values, option]
         )
+    }
+
+    const handleRemoveItem = (option: string): void => {
+        onRemoveItem?.(option)
     }
 
     return (
@@ -63,13 +77,27 @@ const Select = ({ id, options, value, onChange, disabled, customStyles, label }:
                         const isSelected = value?.includes(option)
                         return (
                             <li
-                                css={[styles.listItem, isSelected && styles.listItemSelectd]}
+                                css={[
+                                    styles.listItem,
+                                    isSelected && styles.listItemSelectd,
+                                    readonly && styles.listItemReadOnly
+                                ]}
                                 key={option}
                                 role='option'
                                 aria-selected={isSelected}
-                                onClick={() => handleOnChange(option)}
+                                onClick={readonly ? undefined : () => handleOnChange(option)}
                             >
                                 <span>{option}</span>
+                                {onRemoveItem && (
+                                    <Button
+                                        customStyles={styles.listItemRemoveButton}
+                                        variant={ButtonEnums.variant.text}
+                                        title='Remove item'
+                                        onClick={() => handleRemoveItem(option)}
+                                    >
+                                        X
+                                    </Button>
+                                )}
                             </li>
                         )
                     })}
@@ -81,12 +109,14 @@ const Select = ({ id, options, value, onChange, disabled, customStyles, label }:
 
 type OwnProps = {
     id: string
-    value: string[]
-    onChange: (options: string[]) => void
+    value?: string[]
+    onChange?: (options: string[]) => void
+    onRemoveItem?: (option: string) => void
     disabled?: boolean
     customStyles?: SerializedStyles
     label?: ReactNode
     options?: string[]
+    readonly?: boolean
 }
 
 export default Select

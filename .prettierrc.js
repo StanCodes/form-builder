@@ -13,9 +13,10 @@ module.exports = {
         '^components/(.*)$',
         '^config/(.*)$',
         '^modules/(.*)$',
-        '^utils/(.*)$',
+        '^services/(.*)$',
         '^styles/(.*)$',
         '^types/(.*)$',
+        '^utils/(.*)$',
         '^[./]'
     ],
     printWidth: 120,
