@@ -33,14 +33,12 @@ interface SelectRow {
     rowLabel?: string
     type: typeof select
     id: ControlId
-    options: SelectOption[]
 }
 
 interface TextAreaRow {
     rowLabel?: string
     type: typeof textarea
     id: ControlId
-    //options: SelectOption[]
 }
 
 export type FormState = {
